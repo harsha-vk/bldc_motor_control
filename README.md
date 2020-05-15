@@ -1,6 +1,15 @@
 # BLDC_MOTOR_CONTROLLER
 
-Import "bldc_test" to STM32CUBEIDE. 
+Use Stm32CubeIDE software and import "bldc_test" project
+
+Controller used in schematic STM32F407 DISCOVERY
+
+Controller used for source code STM32F401 Nucleo-64
+
+#### Note
+Since STM32F407 DISCOVERY is damaged I used STM32F401 Nucleo-64 to write code.
+So, I have labeled the pin names of the schematic in the "bldc_test.ioc" file to relate between
+the two controllers
 
 #### Important files
 1. main.h
