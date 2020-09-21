@@ -2,14 +2,21 @@
 
 Use Stm32CubeIDE software and import "bldc_test" project
 
-Controller used in schematic STM32F407 DISCOVERY
+Controller used in schematic "STM32F407 DISCOVERY"
 
-Controller used for source code STM32F401 Nucleo-64
+Controller used for source code "STM32F401 Nucleo-64"
 
 #### Note
 Since STM32F407 DISCOVERY is damaged I used STM32F401 Nucleo-64 to write code.
 So, I have labeled the pin names of the schematic in the "bldc_test.ioc" file to relate between
-the two controllers
+the two controllers</br>
+</br>
+PH_A
+PH_B
+PH_C
+PL_A
+PL_B
+PL_C
 
 #### Important files
 1. main.h
@@ -20,6 +27,4 @@ the two controllers
 #### Reference Docs
 1. https://www.microchip.com/wwwAppNotes/AppNotes.aspx?appnote=en012037<br/>
 2. https://www.microchip.com/wwwAppNotes/AppNotes.aspx?appnote=en546013<br/>
-  
-#### Future updates
-There might be updates in hardware and code to implement Field Oriented Control of BLDC
+3. Ready-made board: https://www.st.com/en/ecosystems/x-nucleo-ihm08m1.html<br/>
