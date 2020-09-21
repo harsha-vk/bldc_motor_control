@@ -1,6 +1,7 @@
 # BLDC_MOTOR_CONTROLLER
 
-Use Stm32CubeIDE software and import "bldc_test" project
+Use Stm32CubeIDE software<br/>
+file -> open project from file system -> navigate to sourcecode.zip
 
 Controller used in schematic "STM32F407 DISCOVERY"
 
