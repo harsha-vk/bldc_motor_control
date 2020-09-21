@@ -11,12 +11,16 @@ Since STM32F407 DISCOVERY is damaged I used STM32F401 Nucleo-64 to write code.
 So, I have labeled the pin names of the schematic in the "bldc_test.ioc" file to relate between
 the two controllers</br>
 </br>
-PH_A
-PH_B
-PH_C
-PL_A
-PL_B
-PL_C
+Label: Discovery -> Nucleo</br>
+PH_A: PB_9</br>
+PH_B: PE_6</br>
+PH_C: PA_1</br>
+PL_A: PB_8</br>
+PL_B: PE_5</br>
+PL_C: PA_0</br>
+ZPH_A: PE_9</br>
+ZPH_B: PE_11</br>
+ZPH_C: PE_13</br>
 
 #### Important files
 1. main.h
