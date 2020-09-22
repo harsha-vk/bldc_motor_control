@@ -23,6 +23,7 @@ ZPH_A: PE_9 --> PA_0</br>
 ZPH_B: PE_11 --> PA_1</br>
 ZPH_C: PE_13 --> PB_10</br>
 POT_ANALOG: PA_7 --> PA_4</br>
+Serial communication baud rate = 115200</br>
 
 #### Important files
 1. main.h
