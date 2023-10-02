@@ -1,4 +1,4 @@
-# BLDC_MOTOR_CONTROLLER
+# BLDC_MOTOR_CONTROLLER - Archived
 
 Use Stm32CubeIDE software<br/>
 file -> open project from file system -> navigate to sourcecode.zip
