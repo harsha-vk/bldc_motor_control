@@ -5,3 +5,4 @@ Debug/
 Release/
 .cproject
 .project
+bldc_motor_control.launch

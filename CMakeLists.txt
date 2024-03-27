@@ -38,6 +38,8 @@ set(C_SOURCES Core/Src/main.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_rcc.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim_ex.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_tim.c
+            Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart_ex.c
+            Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c
 )
 set(CXX_SOURCES Core/Src/Main/application.cpp)
