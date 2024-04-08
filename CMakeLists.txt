@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.20)
 
 set(CMAKE_TOOLCHAIN_FILE arm-none-eabi.cmake)
 
@@ -42,7 +42,17 @@ set(C_SOURCES Core/Src/main.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c
 )
-set(CXX_SOURCES Core/Src/Main/application.cpp)
+set(CXX_SOURCES Core/Src/Main/application.cpp
+            Core/Src/Main/mc_drive.cpp
+            Core/Src/Main/mc_init.cpp
+            Core/Src/Main/mc_interrupts.cpp
+            Core/Src/Main/mc_speed_manager.cpp
+            Core/Src/Main/mc_stall_control.cpp
+            Core/Src/Main/mc_startup.cpp
+            Core/Src/Main/pid_autotune.cpp
+            Core/Src/Main/pid.cpp
+)
+
 
 set(ASM_INCLUDES)
 set(C_INCLUDES ${CMAKE_SOURCE_DIR}/Core/Inc
