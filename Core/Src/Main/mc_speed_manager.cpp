@@ -43,6 +43,8 @@ void SpeedManager(void)
 	}
 
 	uint32_t val = adcMap(sravg, 0, MAX_SPEED_REQUEST, 0, MAX_DUTY_CYCLE);
+	
+	// Need to update below logic else, rampup will be very long.
 	if (val > dutyCycle)
 	{
 		dutyCycle++;

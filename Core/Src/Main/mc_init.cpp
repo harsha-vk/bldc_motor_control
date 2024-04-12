@@ -9,6 +9,9 @@ void initSystem()
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_ALL);
     HAL_TIMEx_PWMN_Stop(&htim1, TIM_CHANNEL_ALL);
     HAL_TIM_Base_Stop(&htim1);
+    // Stop adc
+    HAL_TIM_Base_Stop(&htim1);
+    HAL_ADC_Stop_DMA(&hadc1);
 
     tmrWarmupTimer = TIMEBASE_WARMUP_COUNT;
     tmrSlowStartTimer = TIMEBASE_SLOW_STEP;
@@ -39,8 +42,22 @@ void initSystem()
     rampedSpeed = 0;
 
     settings.motorControlMode = MotorControlMode_6STEP;
-    settings.sensorType = SensorType_SENSORLESS;
-    settings.modulationType = ModulationType_HIGH_SIDE;
+    settings.sensorType = SensorType_SENSORED;
+    settings.modulationType = ModulationType_HIGH_SIDE; // Default: HIGH_SIDE
+
+    if ((MotorControlMode_6STEP == settings.motorControlMode) &&
+        (SensorType_SENSORLESS_1 == settings.sensorType) &&
+        (ModulationType_LOW_SIDE == settings.modulationType))
+    {
+        TIM_IC_InitTypeDef sConfigIC = {0};
+        sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_FALLING;
+        sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
+        sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
+        sConfigIC.ICFilter = 0;
+        HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_1);
+        HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_2);
+        HAL_TIM_IC_ConfigChannel(&htim2, &sConfigIC, TIM_CHANNEL_3);
+    }
 
     // Start adc
     HAL_TIM_Base_Start(&htim1);

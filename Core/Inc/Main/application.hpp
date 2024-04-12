@@ -19,7 +19,8 @@ typedef enum
 
 typedef enum
 {
-    SensorType_SENSORLESS,
+    SensorType_SENSORLESS_1,
+    SensorType_SENSORLESS_2,
     SensorType_SENSORED,
 } MC_SensorType_e;
 
@@ -28,6 +29,12 @@ typedef enum
     ModulationType_LOW_SIDE,
     ModulationType_HIGH_SIDE,
 } MC_ModulationType_e;
+
+typedef enum
+{
+    Direction_CW,
+    Direction_CCW,
+} MC_Direction_e;
 
 typedef enum
 {
@@ -60,6 +67,7 @@ typedef struct
     MC_MotorControlMode_e motorControlMode : 4;
     MC_SensorType_e sensorType : 4;
     MC_ModulationType_e modulationType : 4;
+    MC_Direction_e direction : 4;
 } MC_Settings_t;
 
 extern uint8_t commState;
@@ -91,6 +99,8 @@ extern const uint32_t maxDutyCycle;
 extern MC_Settings_t settings;
 
 extern MC_IsrState_e isrState;
+extern GPIO_TypeDef *gpioPort; // need to find alternate method
+extern uint16_t gpioPin; // need to find alternate method
 
 extern uint32_t adcVal[8];
 

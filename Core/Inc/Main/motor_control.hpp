@@ -2,15 +2,18 @@
 #define __MOTOR_CONTROL_HPP
 
 // Timer Definitions
-#define TIMER1_FREQUENCY            32000000
-#define TIMER1_PRESCALER            (1 + 1)
-#define PWM_FREQUENCY               16000
-#define PWM_PERIOD                  (((TIMER1_FREQUENCY / (TIMER1_PRESCALER * PWM_FREQUENCY)) - 1) & 0xFFFF)
+#define TIMER1_FREQUENCY            72000000
+#define TIMER1_PRESCALER            0
+#define PWM_FREQUENCY               18000
+// 1 for Up/Down counter mode
+// 2 for Center Aligned 1 counter mode
+#define PWM_MULTIPLIER              2
+#define PWM_PERIOD                  (((TIMER1_FREQUENCY / ((TIMER1_PRESCALER + 1) * PWM_FREQUENCY * PWM_MULTIPLIER)) - 1) & 0xFFFF)
 // +1 forces PWM to 100% duty cycle
 #define MAX_DUTY_CYCLE              ((PWM_PERIOD + 1) & 0xFFFF)
-#define TIMER2_FREQUENCY            32000000
-#define TIMER2_PRESCALER            (31 + 1)
-#define TMR2_COUNTS_PER_SEC         (TIMER2_FREQUENCY / TIMER2_PRESCALER)
+#define TIMER2_FREQUENCY            72000000
+#define TIMER2_PRESCALER            71
+#define TMR2_COUNTS_PER_SEC         (TIMER2_FREQUENCY / (TIMER2_PRESCALER + 1))
 #define MICROSECONDS_PER_SECOND     1000000
 #define TMR2_COUNTS_PER_us          (TMR2_COUNTS_PER_SEC / MICROSECONDS_PER_SECOND)
 // Resolution of TimebaseManager() in milliseconds
@@ -93,6 +96,7 @@
 // HIGH_INERTIA - Define this variable for systems with slow response times.
 
 // Motor Definitions
+
 // Number of permanent magnet poles
 #define NUM_POLES                   8
 // Number of phases in the motor
@@ -120,7 +124,8 @@
 // PWM duty cycle rate of change in response to speed control
 // TIMEBASE_DUTY_RAMP * 10ms = time between steps
 #define TIMEBASE_DUTY_RAMP          1
-// Dwell time at slow step commutation: TIMEBASE_SLOW_STEP * 10ms = dwell time
+// Dwell time at slow step commutation
+// TIMEBASE_SLOW_STEP * 10ms = dwell time
 #define TIMEBASE_SLOW_STEP          20
 // Number of slow commutations between warmup and startup
 #define SLOW_STEPS                  1
@@ -130,10 +135,9 @@
 // Blanking count in microseconds
 #define BLANKING_COUNT_us           100
 #define BLANKING_COUNT              (BLANKING_COUNT_us * TMR2_COUNTS_PER_us)
-// stall commutation time in microseconds
+// Stall commutation time in microseconds
 #define STALL_COUNT_us              900
-// NUmber of Timer2 counts below which a stall condition is detected
-#define MICROSECONDS_PER_SECOND     1000000
+// Number of Timer2 counts below which a stall condition is detected
 #define MIN_COMM_TIME               ((STALL_COUNT_us * TMR2_COUNTS_PER_SEC) / MICROSECONDS_PER_SECOND)
 // The raw error is divided by 2 to the power of ERROR_SCALE before accumulating.
 // Example: If the raw error is 96 and ERROR_SCALE is 3 then the error correction that is accumulated
@@ -150,34 +154,31 @@
 #define ADVANCE_COUNT               (ADVANCE_TIMING_us * TMR2_COUNTS_PER_us)
 #define FIXED_ADVANCE_COUNT         (FIXED_ADVANCE_TIMING_us * TMR2_COUNTS_PER_us)
 
-//////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////// Low speed On-Off limits ///////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-
 // maximum number that will come from ADC speed request
 #define MAX_SPEED_REQUEST           (4095)
-
-////////////////////////////////////////////////////////////////////////////////////////
-//// On-Off limits
-
 // percentage of speed request below which the motor will turn off
 #define LOW_OFF_REQUEST_PCT         (15)
-
 // percentage of speed request above which the motor will turn on
 #define LOW_RESTORE_REQUEST_PCT     (25)
-
 #define REQUEST_OFF                 ((MAX_SPEED_REQUEST * LOW_OFF_REQUEST_PCT) / 100)
 #define REQUEST_ON                  ((MAX_SPEED_REQUEST * LOW_RESTORE_REQUEST_PCT) / 100)
-
-//////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////// Speed control averaging factors ///////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////
-
 // ADC averaging factor
 // Number of samples in the ADC average = 2^ADC_AVG_FACTOR
 #define ADC_AVG_FACTOR              (2)
 
 #define STARTUP_COUNT               (0xFFFF - COMM_TIME_INIT + 1)
 #define MAX_TMR2_PRESET             (0xFFFF - MIN_COMM_TIME)
+
+#define M1_PWM_A_H                  TIM_CHANNEL_1
+#define M1_PWM_B_H                  TIM_CHANNEL_2
+#define M1_PWM_C_H                  TIM_CHANNEL_3
+#define M1_PWM_A_L                  TIM_CHANNEL_1
+#define M1_PWM_B_L                  TIM_CHANNEL_2
+#define M1_PWM_C_L                  TIM_CHANNEL_3
+#define M1_HALL_A                   TIM_CHANNEL_1
+#define M1_HALL_B                   TIM_CHANNEL_2
+#define M1_HALL_C                   TIM_CHANNEL_3
+#define HALL_RISING                 TIM_INPUTCHANNELPOLARITY_RISING
+#define HALL_FALLING                TIM_INPUTCHANNELPOLARITY_FALLING
 
 #endif

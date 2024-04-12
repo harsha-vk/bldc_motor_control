@@ -6,10 +6,13 @@ typedef enum : uint8_t
     Pwm_START
 } Pwm_e;
 
+GPIO_TypeDef *gpioPort;
+uint16_t gpioPin;
+
 void tmr1Pwm(uint32_t channel, Pwm_e state);
 void tmr1PwmN(uint32_t channel, Pwm_e state);
 void tmr1SetCompare(uint32_t channel, uint32_t compare);
-void tmr2SetCapturePolarity(uint32_t channel, uint32_t polarity);
+void tmr2InputCaptureStartInterrupt(uint32_t channel, uint32_t polarity);
 
 void commutate()
 {
@@ -19,45 +22,57 @@ void commutate()
         switch (commState)
         {
         case 1:
-            tmr1Pwm(TIM_CHANNEL_3, Pwm_STOP);
-            tmr1Pwm(TIM_CHANNEL_1, Pwm_START);
-            tmr1PwmN(TIM_CHANNEL_2, Pwm_START);
-            tmr2SetCapturePolarity(TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_FALLING);
+            tmr1Pwm(M1_PWM_C_H, Pwm_STOP);
+            tmr1Pwm(M1_PWM_A_H, Pwm_START);
+            tmr1PwmN(M1_PWM_B_L, Pwm_START);
+            tmr2InputCaptureStartInterrupt(M1_HALL_C, HALL_FALLING);
+            gpioPort = M1_HALL_C_GPIO_Port; // need to find alternate method
+            gpioPin = M1_HALL_C_Pin;
             flags.risingBemfFlag = 0;
             break;
         case 2:
-            tmr1PwmN(TIM_CHANNEL_2, Pwm_STOP);
-            // tmr1Pwm(TIM_CHANNEL_1, Pwm_START);
-            tmr1PwmN(TIM_CHANNEL_3, Pwm_START);
-            tmr2SetCapturePolarity(TIM_CHANNEL_2, TIM_INPUTCHANNELPOLARITY_RISING);
+            tmr1PwmN(M1_PWM_B_L, Pwm_STOP);
+            // tmr1Pwm(M1_PWM_A_H, Pwm_START);
+            tmr1PwmN(M1_PWM_C_L, Pwm_START);
+            tmr2InputCaptureStartInterrupt(M1_HALL_B, HALL_RISING);
+            gpioPort = M1_HALL_B_GPIO_Port;
+            gpioPin = M1_HALL_B_Pin;
             flags.risingBemfFlag = 1;
             break;
         case 3:
-            tmr1Pwm(TIM_CHANNEL_1, Pwm_STOP);
-            tmr1Pwm(TIM_CHANNEL_2, Pwm_START);
-            // tmr1PwmN(TIM_CHANNEL_3, Pwm_START);
-            tmr2SetCapturePolarity(TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_FALLING);
+            tmr1Pwm(M1_PWM_A_H, Pwm_STOP);
+            tmr1Pwm(M1_PWM_B_H, Pwm_START);
+            // tmr1PwmN(M1_PWM_C_L, Pwm_START);
+            tmr2InputCaptureStartInterrupt(M1_HALL_A, HALL_FALLING);
+            gpioPort = M1_HALL_A_GPIO_Port;
+            gpioPin = M1_HALL_A_Pin;
             flags.risingBemfFlag = 0;
             break;
         case 4:
-            tmr1PwmN(TIM_CHANNEL_3, Pwm_STOP);
-            // tmr1Pwm(TIM_CHANNEL_2, Pwm_START);
-            tmr1PwmN(TIM_CHANNEL_1, Pwm_START);
-            tmr2SetCapturePolarity(TIM_CHANNEL_3, TIM_INPUTCHANNELPOLARITY_RISING);
+            tmr1PwmN(M1_PWM_C_L, Pwm_STOP);
+            // tmr1Pwm(M1_PWM_B_H, Pwm_START);
+            tmr1PwmN(M1_PWM_A_L, Pwm_START);
+            tmr2InputCaptureStartInterrupt(M1_HALL_C, HALL_RISING);
+            gpioPort = M1_HALL_C_GPIO_Port;
+            gpioPin = M1_HALL_C_Pin;
             flags.risingBemfFlag = 1;
             break;
         case 5:
-            tmr1Pwm(TIM_CHANNEL_2, Pwm_STOP);
-            tmr1Pwm(TIM_CHANNEL_3, Pwm_START);
-            // tmr1PwmN(TIM_CHANNEL_1, Pwm_START);
-            tmr2SetCapturePolarity(TIM_CHANNEL_2, TIM_INPUTCHANNELPOLARITY_FALLING);
+            tmr1Pwm(M1_PWM_B_H, Pwm_STOP);
+            tmr1Pwm(M1_PWM_C_L, Pwm_START);
+            // tmr1PwmN(M1_PWM_A_L, Pwm_START);
+            tmr2InputCaptureStartInterrupt(M1_HALL_B, HALL_FALLING);
+            gpioPort = M1_HALL_B_GPIO_Port;
+            gpioPin = M1_HALL_B_Pin;
             flags.risingBemfFlag = 0;
             break;
         case 6:
-            tmr1PwmN(TIM_CHANNEL_1, Pwm_STOP);
-            // tmr1Pwm(TIM_CHANNEL_3, Pwm_START);
-            tmr1PwmN(TIM_CHANNEL_2, Pwm_START);
-            tmr2SetCapturePolarity(TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);
+            tmr1PwmN(M1_PWM_A_L, Pwm_STOP);
+            tmr1Pwm(M1_PWM_C_H, Pwm_START);
+            tmr1PwmN(M1_PWM_B_L, Pwm_START);
+            tmr2InputCaptureStartInterrupt(M1_HALL_A, HALL_RISING);
+            gpioPort = M1_HALL_A_GPIO_Port;
+            gpioPin = M1_HALL_A_Pin;
             flags.risingBemfFlag = 1;
             commState = 0;
             break;
@@ -70,13 +85,15 @@ void commutate()
         }
         break;
     }
+    // write commstate code for ccw direction as well 
     commState++;
 }
 
 void tmr1Pwm(uint32_t channel, Pwm_e state)
 {
-    if (Pwm_START == state)
+    switch (state)
     {
+    case Pwm_START:
         switch (settings.modulationType)
         {
         case ModulationType_HIGH_SIDE:
@@ -87,17 +104,18 @@ void tmr1Pwm(uint32_t channel, Pwm_e state)
             break;
         }
         HAL_TIM_PWM_Start(&htim1, channel);
-    }
-    else
-    {
+        break;
+    case Pwm_STOP:
         HAL_TIM_PWM_Stop(&htim1, channel);
+        break;
     }
 }
 
 void tmr1PwmN(uint32_t channel, Pwm_e state)
 {
-    if (Pwm_START == state)
+    switch (state)
     {
+    case Pwm_START:
         switch (settings.modulationType)
         {
         case ModulationType_HIGH_SIDE:
@@ -108,10 +126,10 @@ void tmr1PwmN(uint32_t channel, Pwm_e state)
             break;
         }
         HAL_TIMEx_PWMN_Start(&htim1, channel);
-    }
-    else
-    {
+        break;
+    case Pwm_STOP:
         HAL_TIMEx_PWMN_Stop(&htim1, channel);
+        break;
     }
 }
 
@@ -120,11 +138,16 @@ void tmr1SetCompare(uint32_t channel, uint32_t compare)
     __HAL_TIM_SET_COMPARE(&htim1, channel, compare);
 }
 
-void tmr2SetCapturePolarity(uint32_t channel, uint32_t polarity)
+void tmr2InputCaptureStartInterrupt(uint32_t channel, uint32_t polarity)
 {
     if (!(SensorType_SENSORED == settings.sensorType))
     {
         return;
     }
     __HAL_TIM_SET_CAPTUREPOLARITY(&htim2, channel, polarity);
+    if (!(flags.startupCompleteFlag))
+    {
+        return;
+    }
+    HAL_TIM_IC_Start_IT(&htim2, channel);
 }
