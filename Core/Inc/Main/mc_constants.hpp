@@ -1,5 +1,5 @@
-#ifndef __MOTOR_CONTROL_HPP
-#define __MOTOR_CONTROL_HPP
+#ifndef __MC_CONSTANTS_HPP
+#define __MC_CONSTANTS_HPP
 
 // Timer Definitions
 #define TIMER1_FREQUENCY            72000000
@@ -181,4 +181,36 @@
 #define HALL_RISING                 TIM_INPUTCHANNELPOLARITY_RISING
 #define HALL_FALLING                TIM_INPUTCHANNELPOLARITY_FALLING
 
-#endif
+typedef enum
+{
+    MotorControlMode_6STEP,
+    MotorControlMode_FOC,
+    MotorControlMode_PROFILING,
+} MC_MotorControlMode_e;
+
+typedef enum
+{
+    SensorType_SENSORLESS_1,
+    SensorType_SENSORLESS_2,
+    SensorType_SENSORED,
+} MC_SensorType_e;
+
+typedef enum
+{
+    ModulationType_LOW_SIDE,
+    ModulationType_HIGH_SIDE,
+} MC_ModulationType_e;
+
+typedef enum
+{
+    Direction_CW,
+    Direction_CCW,
+} MC_Direction_e;
+
+typedef enum
+{
+    IsrState_ZERO_DETECT,
+    IsrState_COMMUTATE
+} MC_IsrState_e;
+
+#endif // __MC_CONSTANTS_HPP

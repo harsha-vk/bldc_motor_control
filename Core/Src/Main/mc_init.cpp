@@ -31,7 +31,6 @@ void initSystem()
     flags.startupInProgress = 0;
     flags.stopFlag = 0;
     flags.runFlag = 0;
-
     flags.measureBemfFlag = 0;
     zcError = 0;
     temp = 0;

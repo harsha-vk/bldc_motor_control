@@ -29,8 +29,20 @@ void controlSlowStart()
                 HAL_TIM_Base_Start_IT(&htim2);
                 break;
             case SensorType_SENSORED:
-                // start interrupts individually. Rewrite below code.
-                HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1 | TIM_CHANNEL_2 | TIM_CHANNEL_3);
+                switch (gpioPin)
+                {
+                case M1_BEMF_A_Pin:
+                    HAL_TIM_IC_Start_IT(&htim2, M1_HALL_A);
+                    break;
+                case M1_BEMF_B_Pin:
+                    HAL_TIM_IC_Start_IT(&htim2, M1_HALL_B);
+                    break;
+                case M1_BEMF_C_Pin:
+                    HAL_TIM_IC_Start_IT(&htim2, M1_HALL_C);
+                    break;
+                default:
+                    break;
+                }
                 break;
             }
         }

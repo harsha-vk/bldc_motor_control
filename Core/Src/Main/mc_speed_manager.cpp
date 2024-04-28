@@ -2,7 +2,7 @@
 
 long adcMap(long x, long inMin, long inMax, long outMin, long outMax);
 
-void SpeedManager(void)
+void speedManager(void)
 {
 	static uint32_t srsum = 0;
 	static uint32_t sravg = 0;
@@ -41,7 +41,7 @@ void SpeedManager(void)
 	{
 		return;
 	}
-
+	
 	uint32_t val = adcMap(sravg, 0, MAX_SPEED_REQUEST, 0, MAX_DUTY_CYCLE);
 	
 	// Need to update below logic else, rampup will be very long.
@@ -58,4 +58,9 @@ void SpeedManager(void)
 long adcMap(long x, long inMin, long inMax, long outMin, long outMax)
 {
 	return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
+
+void speedFeedback()
+{
+	;
 }

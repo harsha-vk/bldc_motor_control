@@ -3,44 +3,12 @@
 
 #include "main.h"
 #include "stm32f3xx_hal.h"
-#include "motor_control.hpp"
+#include "mc_constants.hpp"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
 extern UART_HandleTypeDef huart2;
-
-typedef enum
-{
-    MotorControlMode_6STEP,
-    MotorControlMode_FOC,
-    MotorControlMode_PROFILING,
-} MC_MotorControlMode_e;
-
-typedef enum
-{
-    SensorType_SENSORLESS_1,
-    SensorType_SENSORLESS_2,
-    SensorType_SENSORED,
-} MC_SensorType_e;
-
-typedef enum
-{
-    ModulationType_LOW_SIDE,
-    ModulationType_HIGH_SIDE,
-} MC_ModulationType_e;
-
-typedef enum
-{
-    Direction_CW,
-    Direction_CCW,
-} MC_Direction_e;
-
-typedef enum
-{
-    IsrState_ZERO_DETECT,
-    IsrState_COMMUTATE
-} MC_IsrState_e;
 
 typedef struct
 {
