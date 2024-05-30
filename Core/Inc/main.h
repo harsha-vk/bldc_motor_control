@@ -61,6 +61,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define USR_BTN_Pin GPIO_PIN_13
 #define USR_BTN_GPIO_Port GPIOC
+#define USR_BTN_EXTI_IRQn EXTI15_10_IRQn
 #define M1_CURR_FDBK_C_Pin GPIO_PIN_0
 #define M1_CURR_FDBK_C_GPIO_Port GPIOC
 #define M1_CURR_FDBK_B_Pin GPIO_PIN_1
