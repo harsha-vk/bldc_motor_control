@@ -1,18 +1,22 @@
 #include "application.hpp"
+#include "mc_main.hpp"
 
 MC_Settings_t settings;
 MC_Timers_t timers;
 MC_Flags_t flags;
 uint8_t slowStartEvents;
 uint32_t ADC_BUFFER_ARRAY[ADC_BUFFER_LENGTH];
-uint32_t dutyCycle;
-uint8_t commState;
+uint8_t stepNumber;
+MC::Readings *readings = new MC::Readings();
+MC::PIDController *pidController = new MC::PIDController();;
 
 uint32_t timeBaseCount;
 
 void setup()
 {
+    flags.powerFlag = 0;
     flags.stopFlag = 1;
+    HAL_GPIO_WritePin(USR_LED_GPIO_Port, USR_LED_Pin, GPIO_PIN_RESET);
 }
 
 void loop()
@@ -27,6 +31,10 @@ void loop()
     controlStartUp();
     stallControl();
     speedManager();
+
+    // TODO: read UART buffer to get settings and pid params before powerup
+    // and store in FLASH
+    // TODO: send readings to UART
 }
 
 void timeBaseManager()
