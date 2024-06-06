@@ -60,7 +60,7 @@
   @{
  */
 
-#include "cmsis_version.h"
+#include <cmsis_version.h>
 
 /*  CMSIS SC300 definitions */
 #define __SC300_CMSIS_VERSION_MAIN  (__CM_CMSIS_VERSION_MAIN)                /*!< \deprecated [31:16] CMSIS HAL main version */
@@ -112,7 +112,7 @@
 
 #endif
 
-#include "cmsis_compiler.h"               /* CMSIS compiler specific defines */
+#include <cmsis_compiler.h>               /* CMSIS compiler specific defines */
 
 
 #ifdef __cplusplus

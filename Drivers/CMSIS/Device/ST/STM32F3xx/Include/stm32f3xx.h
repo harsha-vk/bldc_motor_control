@@ -124,7 +124,7 @@
 #if defined(STM32F301x8)
   #include "stm32f301x8.h"
 #elif defined(STM32F302x8)
-  #include "stm32f302x8.h"
+  #include <stm32f302x8.h>
 #elif defined(STM32F302xC)
   #include "stm32f302xc.h"
 #elif defined(STM32F302xE)
@@ -263,7 +263,7 @@ typedef enum
   */
 
 #if defined (USE_HAL_DRIVER)
- #include "stm32f3xx_hal.h"
+ #include <stm32f3xx_hal.h>
 #endif /* USE_HAL_DRIVER */
 
 #ifdef __cplusplus

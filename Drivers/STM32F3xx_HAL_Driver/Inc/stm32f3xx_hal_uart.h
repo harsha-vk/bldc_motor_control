@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f3xx_hal_def.h"
+#include <stm32f3xx_hal_def.h>
 
 /** @addtogroup STM32F3xx_HAL_Driver
   * @{
@@ -1444,7 +1444,7 @@ typedef  void (*pUART_RxEventCallbackTypeDef)
   */
 
 /* Include UART HAL Extended module */
-#include "stm32f3xx_hal_uart_ex.h"
+#include <stm32f3xx_hal_uart_ex.h>
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup UART_Exported_Functions UART Exported Functions

@@ -25,7 +25,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f3xx_hal_def.h"
+#include <stm32f3xx_hal_def.h>
 
 /** @addtogroup STM32F3xx_HAL_Driver
   * @{
@@ -152,7 +152,7 @@
   */    
 
 /* Include PWR HAL Extended module */
-#include "stm32f3xx_hal_pwr_ex.h"
+#include <stm32f3xx_hal_pwr_ex.h>
 
 /* Exported functions --------------------------------------------------------*/
 

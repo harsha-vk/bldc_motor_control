@@ -25,11 +25,11 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f3xx_hal_def.h"
+#include <stm32f3xx_hal_def.h>
    
 /* Include ADC HAL Extended module */
 /* (include on top of file since ADC structures are defined in extended file) */
-#include "stm32f3xx_hal_adc_ex.h"
+#include <stm32f3xx_hal_adc_ex.h>
    
 /** @addtogroup STM32F3xx_HAL_Driver
   * @{

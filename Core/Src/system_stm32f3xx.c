@@ -66,7 +66,7 @@
   * @{
   */
 
-#include "stm32f3xx.h"
+#include <stm32f3xx.h>
 
 /**
   * @}

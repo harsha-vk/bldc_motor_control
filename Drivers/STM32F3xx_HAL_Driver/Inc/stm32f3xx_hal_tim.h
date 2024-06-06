@@ -25,7 +25,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f3xx_hal_def.h"
+#include <stm32f3xx_hal_def.h>
 
 /** @addtogroup STM32F3xx_HAL_Driver
   * @{
@@ -2280,7 +2280,7 @@ mode.
 /* End of private macros -----------------------------------------------------*/
 
 /* Include TIM HAL Extended module */
-#include "stm32f3xx_hal_tim_ex.h"
+#include <stm32f3xx_hal_tim_ex.h>
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup TIM_Exported_Functions TIM Exported Functions
