@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message SerialTxMessage {
+    uint32 v_bus = 1;
+    uint32 curr_fdbk_a = 2;
+    uint32 curr_fdbk_b = 3;
+    uint32 curr_fdbk_c = 4;
+    uint32 bemf_a = 5;
+    uint32 bemf_b = 6;
+    uint32 bemf_c = 7;
+    uint32 output_pulse = 8;
+    uint32 speed_fdbk = 9;
+    uint32 direction = 10;
+}
+
+message SerialRxMessage {
+    uint32 kp_gain = 1;
+    uint32 ki_gain = 2;
+    uint32 kd_gain = 3;
+    bool modulation_type = 4;
+    bool pid_status = 5;
+}
