@@ -1,5 +1,7 @@
 #include "mc_main.hpp"
 
+void filteredSpeedFdbk(int16_t cntVal);
+
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     if ((!flags.stopFlag) && (USR_BTN_Pin == GPIO_Pin))
@@ -26,7 +28,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 
         commutate();
 
-        readings->setSpeedFdbk((uint16_t)__HAL_TIM_GET_COUNTER(&htim2));
+        filteredSpeedFdbk((int16_t)__HAL_TIM_GET_COUNTER(&htim2));
 
         flags.startupCompleteFlag = 1;
         timers.stallTimer = TIMEBASE_STALL_COUNT;
@@ -34,4 +36,16 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
         __HAL_TIM_SET_COUNTER(&htim2, 0);
         HAL_TIM_IC_Start_IT(&htim2, activeHallChannel);
     }
+}
+
+// TODO: ALPHA from rxData settings??
+#define ALPHA 9
+void filteredSpeedFdbk(int16_t cntVal)
+{
+    // Electrical frequency in Hz
+    int16_t elFreqHz = TMR2_COUNTS_PER_SEC / (cntVal * 6);
+    // Equivalent mechanical speed in RPM
+    int16_t mechSpeedRpm = elFreqHz * 60 / POLE_PAIRS;
+    // Weighted moving average
+    txData.speed_fdbk = (txData.speed_fdbk * ALPHA / 100) + (mechSpeedRpm * (100 - ALPHA) / 100);
 }

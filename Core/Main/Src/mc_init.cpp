@@ -21,7 +21,7 @@ void initSystem()
         ADC_BUFFER_ARRAY[i] = 0;
     }
 
-    // TODO : Get settings and params from FLASH
+    // TODO : Get settings and params from flash
     settings.modulationType = ModulationType_HIGH_SIDE;
     settings.pidStatus = PIDStatus_DISABLED;
 
@@ -29,12 +29,14 @@ void initSystem()
     timers.slowStartTimer = TIMEBASE_SLOW_STEP;
     timers.stallTimer = TIMEBASE_STALL_COUNT;
     timers.dutyTimer = TIMEBASE_DUTY_RAMP;
-    timers.pidTimer = TIMEBASE_PID_STEP;
+    timers.pidTimer = TIMEBASE_PID_COUNT;
     flags.tmrWarmupFlag = 0;
     flags.tmrSlowStartFlag = 0;
     flags.tmrStartupFlag = 0;
     flags.tmrStallFlag = 0;
     flags.tmrDutyFlag = 0;
+    flags.tmrPidFlag = 0;
+    flags.tmrSerialReadFlag = 0;
     slowStartEvents = SLOW_STEPS;
     flags.stopFlag = 0;
     flags.runFlag = 0;
@@ -46,9 +48,7 @@ void initSystem()
     flags.stallFlag = 0;
 
     delete pidController;
-    delete readings;
-    pidController = new MC::PIDController(0,0,0,0,0);
-    readings = new MC::Readings();
+    pidController = new MC::PIDController(0,0,0,0,MAX_PWM_PULSE);
 
     // Start adc
     HAL_TIM_Base_Start(&htim1);
@@ -57,7 +57,7 @@ void initSystem()
 
 void initDriver()
 {
-    readings->outputPulse = STARTUP_PULSE;
+    txData.output_pulse = STARTUP_PULSE;
     stepNumber = 1;
     commutate();
     flags.startupInProgress = 1;

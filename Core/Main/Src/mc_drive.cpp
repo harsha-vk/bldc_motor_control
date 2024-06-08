@@ -56,25 +56,25 @@ void commutate()
         break;
     }
 
-    uint8_t isCCW = (Rotate_CCW == readings->direction);
+    uint8_t isCCW = (Rotate_CCW == txData.direction);
     switch (stepNumber)
     {
     case 1:
         stepNumber = isCCW ? 7 : stepNumber;
     case 3:
     case 5:
-        tmr2SetCapturePolarity(activeHallChannel, isCCW ? HALL_RISING : HALL_FALLING);
+        tmr2SetCapturePolarity(activeHallChannel, (isCCW ? HALL_RISING : HALL_FALLING));
         break;
     case 6:
         stepNumber = (!isCCW) ? 0 : stepNumber;
     case 4:
     case 2:
-        tmr2SetCapturePolarity(activeHallChannel, isCCW ? HALL_FALLING : HALL_RISING);
+        tmr2SetCapturePolarity(activeHallChannel, (isCCW ? HALL_FALLING : HALL_RISING));
         break;
     default:
         break;
     }
-    stepNumber = stepNumber + readings->direction;
+    stepNumber = stepNumber + txData.direction;
 }
 
 void tmr1PwmStart(uint32_t channel)
@@ -82,7 +82,7 @@ void tmr1PwmStart(uint32_t channel)
     switch (settings.modulationType)
     {
     case ModulationType_HIGH_SIDE:
-        tmr1SetCompare(channel, readings->outputPulse);
+        tmr1SetCompare(channel, txData.output_pulse);
         break;
     case ModulationType_LOW_SIDE:
         tmr1SetCompare(channel, maxOutputPulse);
@@ -99,7 +99,7 @@ void tmr1PwmNStart(uint32_t channel)
         tmr1SetCompare(channel, maxOutputPulse);
         break;
     case ModulationType_LOW_SIDE:
-        tmr1SetCompare(channel, readings->outputPulse);
+        tmr1SetCompare(channel, txData.output_pulse);
         break;
     }
     HAL_TIMEx_PWMN_Start(&htim1, channel);

@@ -1,14 +1,14 @@
 #ifndef __PID_HPP
 #define __PID_HPP
 
-#include "stm32f3xx_hal.h"
+#include <stm32f3xx_hal.h>
 
 namespace MC
 {
     class PIDController
     {
     private:
-        const int16_t GAIN_DIV = 8192;
+        const uint8_t GAIN_DIV = 13;
         int16_t reference;
         int16_t kpGain;
         int16_t kiGain;

@@ -22,20 +22,29 @@
 #define TMR2_COUNTS_PER_SEC         (TIMER2_FREQUENCY / (TIMER2_PRESCALER + 1))
 #define MICROSECONDS_PER_SECOND     1000000
 #define TMR2_COUNTS_PER_us          (TMR2_COUNTS_PER_SEC / MICROSECONDS_PER_SECOND)
+
+
 // Resolution of TimebaseManager() in milliseconds
 #define TIMEBASE_MS_PER_COUNT       10
 // Number of milliseconds to dwell in warmup state
 #define TIMEBASE_WARMUP_ms          400
 #define TIMEBASE_WARMUP_COUNT       (TIMEBASE_WARMUP_ms / TIMEBASE_MS_PER_COUNT)
+// Dwell time at slow step commutation
+// TIMEBASE_SLOW_STEP * 10ms = dwell time
+#define TIMEBASE_SLOW_STEP          20
 // Number of milliseconds allowed to achieve magnetic lock
 #define TIMEBASE_STARTUP_ms         2000
 #define TIMEBASE_STARTUP_COUNT      (TIMEBASE_STARTUP_ms / TIMEBASE_MS_PER_COUNT)
 // Number of milliseconds in out-of-lock condition to recognize stall
 #define TIMEBASE_STALL_ms           1000
 #define TIMEBASE_STALL_COUNT        (TIMEBASE_STALL_ms / TIMEBASE_MS_PER_COUNT)
+// PWM duty cycle rate of change in response to speed control
+// TIMEBASE_DUTY_RAMP * 10ms = time between steps
+#define TIMEBASE_DUTY_RAMP          1
+// TIMEBASE_PID_STEP * 10ms = pid sample time
+#define TIMEBASE_PID_COUNT          5
 #define TIMEBASE_10ms               10
 
-// TODO: organize. rename if necessary
 
 // Startup drive percentage
 #define STARTUP_DRIVE_PCT           13
@@ -49,17 +58,8 @@
 #define MIN_PWM_PULSE               (MIN_DRIVE_PCT * MAX_PWM_PULSE / 100)
 // Maximum sequential startup events before stop
 #define MAX_STARTUP_EVENTS          2
-// PWM duty cycle rate of change in response to speed control
-// TIMEBASE_DUTY_RAMP * 10ms = time between steps
-#define TIMEBASE_DUTY_RAMP          1
-#define TIMEBASE_PID_STEP           5
-// Dwell time at slow step commutation
-// TIMEBASE_SLOW_STEP * 10ms = dwell time
-#define TIMEBASE_SLOW_STEP          20
 // Number of slow commutations between warmup and startup
 #define SLOW_STEPS                  1
-// Stall commutation time in microseconds
-#define STALL_COUNT_us              900
 
 
 // maximum number that will come from ADC
@@ -85,6 +85,7 @@
 #define HALL_RISING                 TIM_INPUTCHANNELPOLARITY_RISING
 #define HALL_FALLING                TIM_INPUTCHANNELPOLARITY_FALLING
 
+
 #define ADC_BUFFER_ARRAY            adcBuffer
 #define ADC_BUFFER_LENGTH           8
 #define ADC_M1_CURR_FDBK_A          adcBuffer[0]
@@ -95,6 +96,14 @@
 #define ADC_M1_BEMF_A               adcBuffer[5]
 #define ADC_M1_BEMF_B               adcBuffer[6]
 #define ADC_M1_BEMF_C               adcBuffer[7]
+
+
+// Max length of rx data is 64 bits i.e. 8 bytes.
+#define RX_BUFFER_LENGTH            8
+#define RX_TIMEOUT                  6
+// Address of last FLASH page
+#define FLASH_PAGE_ADDRESS          0x0803F800UL
+#define FLASH_DATA_ADDRESS          FLASH_PAGE_ADDRESS
 
 
 typedef enum

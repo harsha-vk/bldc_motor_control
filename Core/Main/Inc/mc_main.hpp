@@ -3,8 +3,10 @@
 
 #include "main.h"
 #include "mc_constants.hpp"
-#include "pid.hpp"
-#include "readings.hpp"
+#include "mc_pid.hpp"
+#include "pb_encode.h"
+#include "pb_decode.h"
+#include "serial.pb.h"
 
 extern ADC_HandleTypeDef hadc1;
 extern TIM_HandleTypeDef htim1;
@@ -34,6 +36,8 @@ typedef struct
     uint8_t tmrStartupFlag : 1;
     uint8_t tmrStallFlag : 1;
     uint8_t tmrDutyFlag : 1;
+    uint8_t tmrPidFlag : 1;
+    uint8_t tmrSerialReadFlag : 1;
     uint8_t powerFlag : 1;
     uint8_t stopFlag : 1;
     uint8_t runFlag : 1;
@@ -52,8 +56,9 @@ extern uint8_t slowStartEvents;
 extern uint32_t ADC_BUFFER_ARRAY[ADC_BUFFER_LENGTH];
 extern uint8_t stepNumber;
 extern uint32_t activeHallChannel;
-extern MC::Readings *readings;
 extern MC::PIDController *pidController;
+extern _SerialTxMessage txData;
+extern _SerialRxMessage rxData;
 
 void initSystem();
 void initDriver();
@@ -63,6 +68,7 @@ void controlSlowStart();
 void controlStartUp();
 void stallControl();
 void speedManager();
+void pidManager();
 void commutate();
 
 #endif // __MC_MAIN_HPP

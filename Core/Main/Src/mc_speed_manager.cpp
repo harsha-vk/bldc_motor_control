@@ -2,9 +2,7 @@
 
 int16_t mapToReference(int16_t x, int16_t inMin, int16_t inMax, int16_t outMin, int16_t outMax);
 
-// TODO: look for other way to update pid output
-
-void speedManager(void)
+void speedManager()
 {
 	static uint32_t srsum = 0;
 	static uint32_t sravg = 0;
@@ -31,7 +29,7 @@ void speedManager(void)
 		return;
 	}
 
-	if (sravg > REQUEST_CCW && sravg < REQUEST_CW)
+	if ((sravg > REQUEST_CCW) && (sravg < REQUEST_CW))
 	{
 		if (flags.runFlag)
 		{
@@ -51,41 +49,50 @@ void speedManager(void)
 		if (sravg <= REQUEST_CCW)
 		{
 			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_RPM, MAX_RPM);
-			readings->direction = Rotate_CCW;
+			txData.direction = Rotate_CCW;
 		}
 		if (sravg >= REQUEST_CW)
 		{
 			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_RPM, MAX_RPM);
-			readings->direction = Rotate_CW;
+			txData.direction = Rotate_CW;
 		}
 		pidController->setReference(val);
-		if (flags.runFlag && (0 == (--timers.pidTimer)))
-		{
-			readings->outputPulse = pidController->updateOutput(readings->getSpeedFdbk());
-			timers.pidTimer = TIMEBASE_PID_STEP;
-		}
 	}
 	else
 	{
 		if (sravg <= REQUEST_CCW)
 		{
 			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_PWM_PULSE, MAX_PWM_PULSE);
-			readings->direction = Rotate_CCW;
+			txData.direction = Rotate_CCW;
 		}
 		if (sravg >= REQUEST_CW)
 		{
 			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_PWM_PULSE, MAX_PWM_PULSE);
-			readings->direction = Rotate_CW;
+			txData.direction = Rotate_CW;
 		}
 
-		if (val > readings->outputPulse)
+		if (val > txData.output_pulse)
 		{
-			readings->outputPulse = readings->outputPulse + (RAMP_UP_FACTOR % (val - readings->outputPulse));
+			txData.output_pulse += RAMP_UP_FACTOR % (val - txData.output_pulse);
 		}
-		if (val < readings->outputPulse)
+		if (val < txData.output_pulse)
 		{
-			readings->outputPulse = readings->outputPulse - (RAMP_UP_FACTOR % (readings->outputPulse - val));
+			txData.output_pulse -= RAMP_UP_FACTOR % (txData.output_pulse - val);
 		}
+	}
+}
+
+void pidManager()
+{
+	if ((PIDStatus_DISABLED == settings.pidStatus) ||
+		(!flags.startupCompleteFlag) || (!flags.tmrPidFlag))
+	{
+		return;
+	}
+	if ((--timers.pidTimer) == 0)
+	{
+		timers.pidTimer = TIMEBASE_PID_COUNT;
+		txData.output_pulse = pidController->updateOutput(txData.speed_fdbk);
 	}
 }
 

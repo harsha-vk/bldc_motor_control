@@ -22,6 +22,10 @@ set(C_SOURCES Core/Src/main.c
             Core/Src/syscalls.c
             Core/Src/sysmem.c
             Core/Src/system_stm32f3xx.c
+            Core/Proto/Src/pb_common.c
+            Core/Proto/Src/pb_decode.c
+            Core/Proto/Src/pb_encode.c
+            Core/Proto/Src/serial.pb.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc_ex.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_adc.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_cortex.c
@@ -42,28 +46,29 @@ set(C_SOURCES Core/Src/main.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c
 )
-set(CXX_SOURCES Core/Src/Main/mc_main.cpp
-            Core/Src/Main/mc_drive.cpp
-            Core/Src/Main/mc_init.cpp
-            Core/Src/Main/mc_interrupts.cpp
-            Core/Src/Main/mc_speed_manager.cpp
-            Core/Src/Main/mc_stall_control.cpp
-            Core/Src/Main/mc_startup.cpp
-            Core/Src/Main/pid.cpp
-            Core/Src/Main/readings.cpp
+set(CXX_SOURCES Core/Main/Src/mc_main.cpp
+            Core/Main/Src/mc_drive.cpp
+            Core/Main/Src/mc_init.cpp
+            Core/Main/Src/mc_interrupts.cpp
+            Core/Main/Src/mc_speed_manager.cpp
+            Core/Main/Src/mc_stall_control.cpp
+            Core/Main/Src/mc_startup.cpp
+            Core/Main/Src/mc_pid.cpp
 )
 
 
 set(ASM_INCLUDES)
 set(C_INCLUDES ${CMAKE_SOURCE_DIR}/Core/Inc
-            ${CMAKE_SOURCE_DIR}/Core/Inc/Main
+            ${CMAKE_SOURCE_DIR}/Core/Main/Inc
+            ${CMAKE_SOURCE_DIR}/Core/Proto/Inc
             ${CMAKE_SOURCE_DIR}/Drivers/STM32F3xx_HAL_Driver/Inc
             ${CMAKE_SOURCE_DIR}/Drivers/STM32F3xx_HAL_Driver/Inc/Legacy
             ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32F3xx/Include
             ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Include
 )
 set(CXX_INCLUDES ${CMAKE_SOURCE_DIR}/Core/Inc
-            ${CMAKE_SOURCE_DIR}/Core/Inc/Main
+            ${CMAKE_SOURCE_DIR}/Core/Main/Inc
+            ${CMAKE_SOURCE_DIR}/Core/Proto/Inc
             ${CMAKE_SOURCE_DIR}/Drivers/STM32F3xx_HAL_Driver/Inc
             ${CMAKE_SOURCE_DIR}/Drivers/STM32F3xx_HAL_Driver/Inc/Legacy
             ${CMAKE_SOURCE_DIR}/Drivers/CMSIS/Device/ST/STM32F3xx/Include

@@ -2,22 +2,14 @@
 
 void controlSlowStart()
 {
-    if (!(flags.initCompleteFlag))
-    {
-        return;
-    }
-    if (flags.slowStartCompleteFlag)
-    {
-        return;
-    }
-    if (!(flags.tmrSlowStartFlag))
+    if ((!flags.initCompleteFlag) || flags.slowStartCompleteFlag || (!flags.tmrSlowStartFlag))
     {
         return;
     }
     flags.tmrSlowStartFlag = 0;
-    if (--timers.slowStartTimer == 0)
+    if ((--timers.slowStartTimer) == 0)
     {
-        if (--slowStartEvents == 0)
+        if ((--slowStartEvents) == 0)
         {
             flags.slowStartCompleteFlag = 1;
             timers.startupTimer = TIMEBASE_STARTUP_COUNT;
@@ -33,23 +25,15 @@ void controlSlowStart()
 
 void controlStartUp()
 {
-    if (!(flags.slowStartCompleteFlag))
-    {
-        return;
-    }
-    if (!(flags.startupInProgress))
-    {
-        return;
-    }
-    if (!(flags.tmrStartupFlag))
+    if ((!flags.slowStartCompleteFlag) || (!flags.startupInProgress) || (!flags.tmrStartupFlag))
     {
         return;
     }
     flags.tmrStartupFlag = 0;
-    if (--timers.startupTimer == 0)
+    if ((--timers.startupTimer) == 0)
     {
         flags.startupInProgress = 0;
-        if (!(flags.startupCompleteFlag))
+        if (!flags.startupCompleteFlag)
         {
             flags.stopFlag = 1;
         }
