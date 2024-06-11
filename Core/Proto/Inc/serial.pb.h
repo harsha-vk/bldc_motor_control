@@ -9,8 +9,24 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
+/* Enum definitions */
+typedef enum _McData_Rotate {
+    McData_Rotate_CCW = 0,
+    McData_Rotate_CW = 1
+} McData_Rotate;
+
+typedef enum _McParams_ModulationType {
+    McParams_ModulationType_LOW_SIDE = 0,
+    McParams_ModulationType_HIGH_SIDE = 1
+} McParams_ModulationType;
+
+typedef enum _McParams_PidStatus {
+    McParams_PidStatus_DISABLED = 0,
+    McParams_PidStatus_ENABLED = 1
+} McParams_PidStatus;
+
 /* Struct definitions */
-typedef struct _SerialTxMessage {
+typedef struct _McData {
     uint32_t v_bus;
     uint32_t curr_fdbk_a;
     uint32_t curr_fdbk_b;
@@ -20,47 +36,86 @@ typedef struct _SerialTxMessage {
     uint32_t bemf_c;
     uint32_t output_pulse;
     uint32_t speed_fdbk;
-    uint32_t direction;
-} SerialTxMessage;
+    McData_Rotate direction;
+} McData;
 
-typedef struct _SerialRxMessage {
+typedef struct _McParams {
     uint32_t kp_gain;
     uint32_t ki_gain;
     uint32_t kd_gain;
-    bool modulation_type;
-    bool pid_status;
-} SerialRxMessage;
+    uint32_t alpha;
+    McParams_ModulationType modulation_type;
+    McParams_PidStatus pid_status;
+} McParams;
+
+typedef struct _McDataMsg {
+    bool has_msg;
+    McData msg;
+} McDataMsg;
+
+typedef struct _McParamsMsg {
+    bool has_msg;
+    McParams msg;
+} McParamsMsg;
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+/* Helper constants for enums */
+#define _McData_Rotate_MIN McData_Rotate_CCW
+#define _McData_Rotate_MAX McData_Rotate_CW
+#define _McData_Rotate_ARRAYSIZE ((McData_Rotate)(McData_Rotate_CW+1))
+
+#define _McParams_ModulationType_MIN McParams_ModulationType_LOW_SIDE
+#define _McParams_ModulationType_MAX McParams_ModulationType_HIGH_SIDE
+#define _McParams_ModulationType_ARRAYSIZE ((McParams_ModulationType)(McParams_ModulationType_HIGH_SIDE+1))
+
+#define _McParams_PidStatus_MIN McParams_PidStatus_DISABLED
+#define _McParams_PidStatus_MAX McParams_PidStatus_ENABLED
+#define _McParams_PidStatus_ARRAYSIZE ((McParams_PidStatus)(McParams_PidStatus_ENABLED+1))
+
+#define McData_direction_ENUMTYPE McData_Rotate
+
+#define McParams_modulation_type_ENUMTYPE McParams_ModulationType
+#define McParams_pid_status_ENUMTYPE McParams_PidStatus
+
+
+
+
 /* Initializer values for message structs */
-#define SerialTxMessage_init_default             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-#define SerialRxMessage_init_default             {0, 0, 0, 0, 0}
-#define SerialTxMessage_init_zero                {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-#define SerialRxMessage_init_zero                {0, 0, 0, 0, 0}
+#define McData_init_default                      {0, 0, 0, 0, 0, 0, 0, 0, 0, _McData_Rotate_MIN}
+#define McParams_init_default                    {0, 0, 0, 0, _McParams_ModulationType_MIN, _McParams_PidStatus_MIN}
+#define McDataMsg_init_default                   {false, McData_init_default}
+#define McParamsMsg_init_default                 {false, McParams_init_default}
+#define McData_init_zero                         {0, 0, 0, 0, 0, 0, 0, 0, 0, _McData_Rotate_MIN}
+#define McParams_init_zero                       {0, 0, 0, 0, _McParams_ModulationType_MIN, _McParams_PidStatus_MIN}
+#define McDataMsg_init_zero                      {false, McData_init_zero}
+#define McParamsMsg_init_zero                    {false, McParams_init_zero}
 
 /* Field tags (for use in manual encoding/decoding) */
-#define SerialTxMessage_v_bus_tag                1
-#define SerialTxMessage_curr_fdbk_a_tag          2
-#define SerialTxMessage_curr_fdbk_b_tag          3
-#define SerialTxMessage_curr_fdbk_c_tag          4
-#define SerialTxMessage_bemf_a_tag               5
-#define SerialTxMessage_bemf_b_tag               6
-#define SerialTxMessage_bemf_c_tag               7
-#define SerialTxMessage_output_pulse_tag         8
-#define SerialTxMessage_speed_fdbk_tag           9
-#define SerialTxMessage_direction_tag            10
-#define SerialRxMessage_kp_gain_tag              1
-#define SerialRxMessage_ki_gain_tag              2
-#define SerialRxMessage_kd_gain_tag              3
-#define SerialRxMessage_modulation_type_tag      4
-#define SerialRxMessage_pid_status_tag           5
+#define McData_v_bus_tag                         1
+#define McData_curr_fdbk_a_tag                   2
+#define McData_curr_fdbk_b_tag                   3
+#define McData_curr_fdbk_c_tag                   4
+#define McData_bemf_a_tag                        5
+#define McData_bemf_b_tag                        6
+#define McData_bemf_c_tag                        7
+#define McData_output_pulse_tag                  8
+#define McData_speed_fdbk_tag                    9
+#define McData_direction_tag                     10
+#define McParams_kp_gain_tag                     1
+#define McParams_ki_gain_tag                     2
+#define McParams_kd_gain_tag                     3
+#define McParams_alpha_tag                       4
+#define McParams_modulation_type_tag             5
+#define McParams_pid_status_tag                  6
+#define McDataMsg_msg_tag                        1
+#define McParamsMsg_msg_tag                      1
 
 /* Struct field encoding specification for nanopb */
-#define SerialTxMessage_FIELDLIST(X, a) \
+#define McData_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT32,   v_bus,             1) \
 X(a, STATIC,   SINGULAR, UINT32,   curr_fdbk_a,       2) \
 X(a, STATIC,   SINGULAR, UINT32,   curr_fdbk_b,       3) \
@@ -70,30 +125,49 @@ X(a, STATIC,   SINGULAR, UINT32,   bemf_b,            6) \
 X(a, STATIC,   SINGULAR, UINT32,   bemf_c,            7) \
 X(a, STATIC,   SINGULAR, UINT32,   output_pulse,      8) \
 X(a, STATIC,   SINGULAR, UINT32,   speed_fdbk,        9) \
-X(a, STATIC,   SINGULAR, UINT32,   direction,        10)
-#define SerialTxMessage_CALLBACK NULL
-#define SerialTxMessage_DEFAULT NULL
+X(a, STATIC,   SINGULAR, UENUM,    direction,        10)
+#define McData_CALLBACK NULL
+#define McData_DEFAULT NULL
 
-#define SerialRxMessage_FIELDLIST(X, a) \
+#define McParams_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT32,   kp_gain,           1) \
 X(a, STATIC,   SINGULAR, UINT32,   ki_gain,           2) \
 X(a, STATIC,   SINGULAR, UINT32,   kd_gain,           3) \
-X(a, STATIC,   SINGULAR, BOOL,     modulation_type,   4) \
-X(a, STATIC,   SINGULAR, BOOL,     pid_status,        5)
-#define SerialRxMessage_CALLBACK NULL
-#define SerialRxMessage_DEFAULT NULL
+X(a, STATIC,   SINGULAR, UINT32,   alpha,             4) \
+X(a, STATIC,   SINGULAR, UENUM,    modulation_type,   5) \
+X(a, STATIC,   SINGULAR, UENUM,    pid_status,        6)
+#define McParams_CALLBACK NULL
+#define McParams_DEFAULT NULL
 
-extern const pb_msgdesc_t SerialTxMessage_msg;
-extern const pb_msgdesc_t SerialRxMessage_msg;
+#define McDataMsg_FIELDLIST(X, a) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  msg,               1)
+#define McDataMsg_CALLBACK NULL
+#define McDataMsg_DEFAULT NULL
+#define McDataMsg_msg_MSGTYPE McData
+
+#define McParamsMsg_FIELDLIST(X, a) \
+X(a, STATIC,   OPTIONAL, MESSAGE,  msg,               1)
+#define McParamsMsg_CALLBACK NULL
+#define McParamsMsg_DEFAULT NULL
+#define McParamsMsg_msg_MSGTYPE McParams
+
+extern const pb_msgdesc_t McData_msg;
+extern const pb_msgdesc_t McParams_msg;
+extern const pb_msgdesc_t McDataMsg_msg;
+extern const pb_msgdesc_t McParamsMsg_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
-#define SerialTxMessage_fields &SerialTxMessage_msg
-#define SerialRxMessage_fields &SerialRxMessage_msg
+#define McData_fields &McData_msg
+#define McParams_fields &McParams_msg
+#define McDataMsg_fields &McDataMsg_msg
+#define McParamsMsg_fields &McParamsMsg_msg
 
 /* Maximum encoded size of messages (where known) */
-#define SERIAL_PB_H_MAX_SIZE                     SerialTxMessage_size
-#define SerialRxMessage_size                     22
-#define SerialTxMessage_size                     60
+#define McDataMsg_size                           58
+#define McData_size                              56
+#define McParamsMsg_size                         30
+#define McParams_size                            28
+#define SERIAL_PB_H_MAX_SIZE                     McDataMsg_size
 
 #ifdef __cplusplus
 } /* extern "C" */

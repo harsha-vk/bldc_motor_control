@@ -44,47 +44,50 @@ void speedManager()
 	}
 
 	uint16_t val = 0;
-	if (PIDStatus_ENABLED == settings.pidStatus)
+
+	switch (mcParams.msg.pid_status)
 	{
-		if (sravg <= REQUEST_CCW)
-		{
-			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_RPM, MAX_RPM);
-			txData.direction = Rotate_CCW;
-		}
-		if (sravg >= REQUEST_CW)
-		{
-			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_RPM, MAX_RPM);
-			txData.direction = Rotate_CW;
-		}
-		pidController->setReference(val);
-	}
-	else
-	{
+	case McParams_PidStatus_DISABLED:
 		if (sravg <= REQUEST_CCW)
 		{
 			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_PWM_PULSE, MAX_PWM_PULSE);
-			txData.direction = Rotate_CCW;
+			mcData.msg.direction = McData_Rotate_CCW;
 		}
 		if (sravg >= REQUEST_CW)
 		{
 			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_PWM_PULSE, MAX_PWM_PULSE);
-			txData.direction = Rotate_CW;
+			mcData.msg.direction = McData_Rotate_CW;
 		}
 
-		if (val > txData.output_pulse)
+		if (val > mcData.msg.output_pulse)
 		{
-			txData.output_pulse += RAMP_UP_FACTOR % (val - txData.output_pulse);
+			mcData.msg.output_pulse += RAMP_UP_FACTOR % (val - mcData.msg.output_pulse);
 		}
-		if (val < txData.output_pulse)
+		if (val < mcData.msg.output_pulse)
 		{
-			txData.output_pulse -= RAMP_UP_FACTOR % (txData.output_pulse - val);
+			mcData.msg.output_pulse -= RAMP_UP_FACTOR % (mcData.msg.output_pulse - val);
 		}
+		break;
+	case McParams_PidStatus_ENABLED:
+		if (sravg <= REQUEST_CCW)
+		{
+			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_RPM, MAX_RPM);
+			mcData.msg.direction = McData_Rotate_CCW;
+		}
+		if (sravg >= REQUEST_CW)
+		{
+			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_RPM, MAX_RPM);
+			mcData.msg.direction = McData_Rotate_CW;
+		}
+
+		pidController->setReference(val);
+		break;
 	}
 }
 
 void pidManager()
 {
-	if ((PIDStatus_DISABLED == settings.pidStatus) ||
+	if ((McParams_PidStatus_DISABLED == mcParams.msg.pid_status) ||
 		(!flags.startupCompleteFlag) || (!flags.tmrPidFlag))
 	{
 		return;
@@ -92,7 +95,7 @@ void pidManager()
 	if ((--timers.pidTimer) == 0)
 	{
 		timers.pidTimer = TIMEBASE_PID_COUNT;
-		txData.output_pulse = pidController->updateOutput(txData.speed_fdbk);
+		mcData.msg.output_pulse = pidController->updateOutput(mcData.msg.speed_fdbk);
 	}
 }
 

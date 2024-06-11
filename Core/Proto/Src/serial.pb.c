@@ -6,10 +6,10 @@
 #error Regenerate this file with the current version of nanopb generator.
 #endif
 
-PB_BIND(SerialTxMessage, SerialTxMessage, AUTO)
+PB_BIND(McData, McData, AUTO)
 
+PB_BIND(McParams, McParams, AUTO)
 
-PB_BIND(SerialRxMessage, SerialRxMessage, AUTO)
+PB_BIND(McDataMsg, McDataMsg, AUTO)
 
-
-
+PB_BIND(McParamsMsg, McParamsMsg, AUTO)

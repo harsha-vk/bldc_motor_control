@@ -56,36 +56,30 @@ void commutate()
         break;
     }
 
-    uint8_t isCCW = (Rotate_CCW == txData.direction);
-    switch (stepNumber)
+    switch (mcData.msg.direction)
     {
-    case 1:
-        stepNumber = isCCW ? 7 : stepNumber;
-    case 3:
-    case 5:
-        tmr2SetCapturePolarity(activeHallChannel, (isCCW ? HALL_RISING : HALL_FALLING));
+    case McData_Rotate_CCW:
+        tmr2SetCapturePolarity(activeHallChannel,
+                               ((stepNumber % 2) ? HALL_RISING : HALL_FALLING));
+        stepNumber = (stepNumber + 4) % 6 + 1; // 6 to 1 cyclic decrement
         break;
-    case 6:
-        stepNumber = (!isCCW) ? 0 : stepNumber;
-    case 4:
-    case 2:
-        tmr2SetCapturePolarity(activeHallChannel, (isCCW ? HALL_FALLING : HALL_RISING));
-        break;
-    default:
+    case McData_Rotate_CW:
+        tmr2SetCapturePolarity(activeHallChannel,
+                               ((stepNumber % 2) ? HALL_FALLING : HALL_RISING));
+        stepNumber = (stepNumber % 6) + 1; // 1 to 6 cyclic increment
         break;
     }
-    stepNumber = stepNumber + txData.direction;
 }
 
 void tmr1PwmStart(uint32_t channel)
 {
-    switch (settings.modulationType)
+    switch (mcParams.msg.modulation_type)
     {
-    case ModulationType_HIGH_SIDE:
-        tmr1SetCompare(channel, txData.output_pulse);
-        break;
-    case ModulationType_LOW_SIDE:
+    case McParams_ModulationType_LOW_SIDE:
         tmr1SetCompare(channel, maxOutputPulse);
+        break;
+    case McParams_ModulationType_HIGH_SIDE:
+        tmr1SetCompare(channel, mcData.msg.output_pulse);
         break;
     }
     HAL_TIM_PWM_Start(&htim1, channel);
@@ -93,13 +87,13 @@ void tmr1PwmStart(uint32_t channel)
 
 void tmr1PwmNStart(uint32_t channel)
 {
-    switch (settings.modulationType)
+    switch (mcParams.msg.modulation_type)
     {
-    case ModulationType_HIGH_SIDE:
-        tmr1SetCompare(channel, maxOutputPulse);
+    case McParams_ModulationType_LOW_SIDE:
+        tmr1SetCompare(channel, mcData.msg.output_pulse);
         break;
-    case ModulationType_LOW_SIDE:
-        tmr1SetCompare(channel, txData.output_pulse);
+    case McParams_ModulationType_HIGH_SIDE:
+        tmr1SetCompare(channel, maxOutputPulse);
         break;
     }
     HAL_TIMEx_PWMN_Start(&htim1, channel);

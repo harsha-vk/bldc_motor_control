@@ -46,14 +46,16 @@ set(C_SOURCES Core/Src/main.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal_uart.c
             Drivers/STM32F3xx_HAL_Driver/Src/stm32f3xx_hal.c
 )
-set(CXX_SOURCES Core/Main/Src/mc_main.cpp
-            Core/Main/Src/mc_drive.cpp
+set(CXX_SOURCES Core/Main/Src/mc_drive.cpp
+            Core/Main/Src/mc_flash.cpp
             Core/Main/Src/mc_init.cpp
             Core/Main/Src/mc_interrupts.cpp
+            Core/Main/Src/mc_main.cpp
+            Core/Main/Src/mc_pid.cpp
+            Core/Main/Src/mc_serial.cpp
             Core/Main/Src/mc_speed_manager.cpp
             Core/Main/Src/mc_stall_control.cpp
             Core/Main/Src/mc_startup.cpp
-            Core/Main/Src/mc_pid.cpp
 )
 
 
@@ -110,7 +112,7 @@ set(CXX_FLAGS -g3
             -ffunction-sections
             -fdata-sections
             -fstack-usage
-            -fcyclomatic-complexity 
+            -fcyclomatic-complexity
             -fno-exceptions
             -fno-rtti
             -fno-use-cxa-atexit

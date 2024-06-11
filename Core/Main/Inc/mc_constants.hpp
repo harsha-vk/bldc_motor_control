@@ -6,6 +6,7 @@
 #define POLE_PAIRS                  4
 // Maximum speed in RPM
 #define MAX_RPM                     9600
+#define DEFAULT_ALPHA               10
 
 
 #define TIMER1_FREQUENCY            72000000
@@ -41,8 +42,10 @@
 // PWM duty cycle rate of change in response to speed control
 // TIMEBASE_DUTY_RAMP * 10ms = time between steps
 #define TIMEBASE_DUTY_RAMP          1
-// TIMEBASE_PID_STEP * 10ms = pid sample time
+// TIMEBASE_PID_COUNT * 10ms = pid sample time
 #define TIMEBASE_PID_COUNT          5
+// TIMEBASE_SERIAL_COUNT * 10ms = time between each serial write
+#define TIMEBASE_SERIAL_COUNT       3
 #define TIMEBASE_10ms               10
 
 
@@ -98,30 +101,8 @@
 #define ADC_M1_BEMF_C               adcBuffer[7]
 
 
-// Max length of rx data is 64 bits i.e. 8 bytes.
-#define RX_BUFFER_LENGTH            8
-#define RX_TIMEOUT                  6
 // Address of last FLASH page
 #define FLASH_PAGE_ADDRESS          0x0803F800UL
 #define FLASH_DATA_ADDRESS          FLASH_PAGE_ADDRESS
-
-
-typedef enum
-{
-    ModulationType_LOW_SIDE,
-    ModulationType_HIGH_SIDE,
-} MC_ModulationType_e;
-
-typedef enum
-{
-    PIDStatus_DISABLED,
-    PIDStatus_ENABLED,
-} MC_PIDStatus_e;
-
-typedef enum
-{
-    Rotate_CCW = -1,
-    Rotate_CW = 1,
-} MC_Rotate_e;
 
 #endif // __MC_CONSTANTS_HPP

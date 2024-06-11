@@ -15,18 +15,13 @@ extern UART_HandleTypeDef huart2;
 
 typedef struct
 {
-    MC_ModulationType_e modulationType : 1;
-    MC_PIDStatus_e pidStatus : 1;
-} MC_Settings_t;
-
-typedef struct
-{
     uint8_t warmupTimer;
     uint8_t slowStartTimer;
     uint8_t startupTimer;
     uint8_t stallTimer;
     uint8_t dutyTimer;
     uint8_t pidTimer;
+    uint8_t serialWriteTimer;
 } MC_Timers_t;
 
 typedef struct
@@ -38,6 +33,7 @@ typedef struct
     uint8_t tmrDutyFlag : 1;
     uint8_t tmrPidFlag : 1;
     uint8_t tmrSerialReadFlag : 1;
+    uint8_t tmrSerialWriteFlag : 1;
     uint8_t powerFlag : 1;
     uint8_t stopFlag : 1;
     uint8_t runFlag : 1;
@@ -49,7 +45,6 @@ typedef struct
     uint8_t stallFlag : 1;
 } MC_Flags_t;
 
-extern MC_Settings_t settings;
 extern MC_Timers_t timers;
 extern MC_Flags_t flags;
 extern uint8_t slowStartEvents;
@@ -57,8 +52,8 @@ extern uint32_t ADC_BUFFER_ARRAY[ADC_BUFFER_LENGTH];
 extern uint8_t stepNumber;
 extern uint32_t activeHallChannel;
 extern MC::PIDController *pidController;
-extern _SerialTxMessage txData;
-extern _SerialRxMessage rxData;
+extern McDataMsg mcData;
+extern McParamsMsg mcParams;
 
 void initSystem();
 void initDriver();
@@ -66,9 +61,13 @@ void timeBaseManager();
 void warmUpControl();
 void controlSlowStart();
 void controlStartUp();
+void commutate();
 void stallControl();
 void speedManager();
 void pidManager();
-void commutate();
+void serialToData();
+void dataToSerial();
+void flashToData();
+void dataToFlash();
 
 #endif // __MC_MAIN_HPP

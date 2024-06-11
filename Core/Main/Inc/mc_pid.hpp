@@ -20,7 +20,7 @@ namespace MC
 
     public:
         PIDController(int16_t kpGain, int16_t kiGain, int16_t kdGain,
-                  int16_t lowerLimitOutput, int16_t upperLimitOutput);
+                      int16_t lowerLimitOutput, int16_t upperLimitOutput);
         void setReference(uint16_t reference);
         int16_t updateOutput(int16_t fdbk);
     };

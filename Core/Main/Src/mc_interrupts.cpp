@@ -38,14 +38,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
     }
 }
 
-// TODO: ALPHA from rxData settings??
-#define ALPHA 9
 void filteredSpeedFdbk(int16_t cntVal)
 {
     // Electrical frequency in Hz
     int16_t elFreqHz = TMR2_COUNTS_PER_SEC / (cntVal * 6);
     // Equivalent mechanical speed in RPM
     int16_t mechSpeedRpm = elFreqHz * 60 / POLE_PAIRS;
-    // Weighted moving average
-    txData.speed_fdbk = (txData.speed_fdbk * ALPHA / 100) + (mechSpeedRpm * (100 - ALPHA) / 100);
+    // Simple low pass filter
+    mcData.msg.speed_fdbk = (mcData.msg.speed_fdbk * mcParams.msg.alpha / 100) + (mechSpeedRpm * (100 - mcParams.msg.alpha) / 100);
 }

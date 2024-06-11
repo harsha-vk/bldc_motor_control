@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message SerialTxMessage {
+message McData {
     uint32 v_bus = 1;
     uint32 curr_fdbk_a = 2;
     uint32 curr_fdbk_b = 3;
@@ -10,13 +10,37 @@ message SerialTxMessage {
     uint32 bemf_c = 7;
     uint32 output_pulse = 8;
     uint32 speed_fdbk = 9;
-    uint32 direction = 10;
+
+    enum Rotate {
+        CCW = 0;
+        CW = 1;
+    }
+    Rotate direction = 10;
 }
 
-message SerialRxMessage {
+message McParams {
     uint32 kp_gain = 1;
     uint32 ki_gain = 2;
     uint32 kd_gain = 3;
-    bool modulation_type = 4;
-    bool pid_status = 5;
+    uint32 alpha = 4;
+
+    enum ModulationType{
+        LOW_SIDE = 0;
+        HIGH_SIDE = 1;
+    }
+    ModulationType modulation_type = 5;
+
+    enum PidStatus{
+        DISABLED = 0;
+        ENABLED = 1;
+    }
+    PidStatus pid_status = 6;
+}
+
+message McDataMsg {
+    McData msg = 1;
+}
+
+message McParamsMsg {
+    McParams msg = 1;
 }
