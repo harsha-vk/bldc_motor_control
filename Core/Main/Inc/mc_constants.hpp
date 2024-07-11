@@ -4,9 +4,22 @@
 
 // Number of pole pairs
 #define POLE_PAIRS                  4
+// Phase Resistance in milli ohms
+#define PHASE_RESISTANCE            2550
+// Phase Inductance in micro Henry
+#define PHASE_INDUCTANCE            1650
+// Rated voltage in volts
+#define RATED_VOLTAGE               24
+// Rated speed in RPM
+#define RATED_RPM                   4800
 // Maximum speed in RPM
 #define MAX_RPM                     9600
-#define DEFAULT_ALPHA               10
+
+
+// Shunt resistance in milli ohms
+#define SHUNT_RESISTANCE            10
+// Current sense gain * 1000
+#define CURRENT_SENSE_GAIN          5180
 
 
 #define TIMER1_FREQUENCY            72000000
@@ -25,14 +38,15 @@
 #define TMR2_COUNTS_PER_us          (TMR2_COUNTS_PER_SEC / MICROSECONDS_PER_SECOND)
 
 
+#define TIMEBASE_20ms               20
 // Resolution of TimebaseManager() in milliseconds
-#define TIMEBASE_MS_PER_COUNT       10
+#define TIMEBASE_MS_PER_COUNT       TIMEBASE_20ms
 // Number of milliseconds to dwell in warmup state
 #define TIMEBASE_WARMUP_ms          400
 #define TIMEBASE_WARMUP_COUNT       (TIMEBASE_WARMUP_ms / TIMEBASE_MS_PER_COUNT)
 // Dwell time at slow step commutation
-// TIMEBASE_SLOW_STEP * 10ms = dwell time
-#define TIMEBASE_SLOW_STEP          20
+#define TIMEBASE_SLOWSTART_ms       2000
+#define TIMEBASE_SLOWSTART_COUNT    (TIMEBASE_SLOWSTART_ms / TIMEBASE_MS_PER_COUNT)
 // Number of milliseconds allowed to achieve magnetic lock
 #define TIMEBASE_STARTUP_ms         2000
 #define TIMEBASE_STARTUP_COUNT      (TIMEBASE_STARTUP_ms / TIMEBASE_MS_PER_COUNT)
@@ -40,13 +54,14 @@
 #define TIMEBASE_STALL_ms           1000
 #define TIMEBASE_STALL_COUNT        (TIMEBASE_STALL_ms / TIMEBASE_MS_PER_COUNT)
 // PWM duty cycle rate of change in response to speed control
-// TIMEBASE_DUTY_RAMP * 10ms = time between steps
-#define TIMEBASE_DUTY_RAMP          1
-// TIMEBASE_PID_COUNT * 10ms = pid sample time
-#define TIMEBASE_PID_COUNT          5
-// TIMEBASE_SERIAL_COUNT * 10ms = time between each serial write
-#define TIMEBASE_SERIAL_COUNT       3
-#define TIMEBASE_10ms               10
+#define TIMEBASE_DUTY_ms            20
+#define TIMEBASE_DUTY_COUNT         (TIMEBASE_DUTY_ms / TIMEBASE_MS_PER_COUNT)
+// Pid sample time
+#define TIMEBASE_PID_ms             40
+#define TIMEBASE_PID_COUNT          (TIMEBASE_PID_ms / TIMEBASE_MS_PER_COUNT)
+// Serial write period
+#define TIMEBASE_SERIAL_ms          40
+#define TIMEBASE_SERIAL_COUNT       (TIMEBASE_SERIAL_ms / TIMEBASE_MS_PER_COUNT)
 
 
 // Startup drive percentage

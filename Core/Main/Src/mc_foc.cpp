@@ -1,4 +1,4 @@
-#include "mc_pid.hpp"
+#include "mc_foc.hpp"
 
 MC::PIDController::PIDController(int16_t kpGain, int16_t kiGain, int16_t kdGain,
                                  int16_t lowerLimitOutput, int16_t upperLimitOutput)

@@ -51,7 +51,7 @@ set(CXX_SOURCES Core/Main/Src/mc_drive.cpp
             Core/Main/Src/mc_init.cpp
             Core/Main/Src/mc_interrupts.cpp
             Core/Main/Src/mc_main.cpp
-            Core/Main/Src/mc_pid.cpp
+            Core/Main/Src/mc_foc.cpp
             Core/Main/Src/mc_serial.cpp
             Core/Main/Src/mc_speed_manager.cpp
             Core/Main/Src/mc_stall_control.cpp

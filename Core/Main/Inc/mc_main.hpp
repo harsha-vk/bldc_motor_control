@@ -3,7 +3,7 @@
 
 #include "main.h"
 #include "mc_constants.hpp"
-#include "mc_pid.hpp"
+#include "mc_foc.hpp"
 #include "pb_encode.h"
 #include "pb_decode.h"
 #include "serial.pb.h"

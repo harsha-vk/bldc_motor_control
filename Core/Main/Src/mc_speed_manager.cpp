@@ -17,7 +17,7 @@ void speedManager()
 	{
 		return;
 	}
-	timers.dutyTimer = TIMEBASE_DUTY_RAMP;
+	timers.dutyTimer = TIMEBASE_DUTY_COUNT;
 
 	srsum -= sravg;
 	srsum += ADC_USR_POT;

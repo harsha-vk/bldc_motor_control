@@ -28,7 +28,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 
         commutate();
 
-        filteredSpeedFdbk((int16_t)__HAL_TIM_GET_COUNTER(&htim2));
+        filteredSpeedFdbk((uint16_t)__HAL_TIM_GET_COUNTER(&htim2));
 
         flags.startupCompleteFlag = 1;
         timers.stallTimer = TIMEBASE_STALL_COUNT;
@@ -38,12 +38,13 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
     }
 }
 
-void filteredSpeedFdbk(int16_t cntVal)
+void filteredSpeedFdbk(uint16_t cntVal)
 {
     // Electrical frequency in Hz
-    int16_t elFreqHz = TMR2_COUNTS_PER_SEC / (cntVal * 6);
+    uint16_t elFreqHz = TMR2_COUNTS_PER_SEC / (cntVal * 6);
     // Equivalent mechanical speed in RPM
-    int16_t mechSpeedRpm = elFreqHz * 60 / POLE_PAIRS;
-    // Simple low pass filter
-    mcData.msg.speed_fdbk = (mcData.msg.speed_fdbk * mcParams.msg.alpha / 100) + (mechSpeedRpm * (100 - mcParams.msg.alpha) / 100);
+    uint16_t mechSpeedRpm = elFreqHz * 60 / POLE_PAIRS;
+    // Low pass filter
+    uint16_t beta = mcParams.msg.alpha * 100 / (mcParams.msg.alpha + cntVal);
+    mcData.msg.speed_fdbk = (mcData.msg.speed_fdbk * beta / 100) + (mechSpeedRpm * (100 - beta) / 100);
 }

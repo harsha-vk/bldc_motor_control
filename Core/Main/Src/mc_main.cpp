@@ -40,7 +40,7 @@ void loop()
 
 void timeBaseManager()
 {
-    if ((timeBaseCount - HAL_GetTick()) >= TIMEBASE_10ms)
+    if ((timeBaseCount - HAL_GetTick()) >= TIMEBASE_20ms)
     {
         timeBaseCount = HAL_GetTick();
         flags.tmrWarmupFlag = 1;

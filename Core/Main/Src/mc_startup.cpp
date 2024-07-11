@@ -17,7 +17,7 @@ void controlSlowStart()
         }
         else
         {
-            timers.slowStartTimer = TIMEBASE_SLOW_STEP;
+            timers.slowStartTimer = TIMEBASE_SLOWSTART_COUNT;
             commutate();
         }
     }

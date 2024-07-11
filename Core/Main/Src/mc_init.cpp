@@ -24,9 +24,9 @@ void initSystem()
     // flashToData();
 
     timers.warmupTimer = TIMEBASE_WARMUP_COUNT;
-    timers.slowStartTimer = TIMEBASE_SLOW_STEP;
+    timers.slowStartTimer = TIMEBASE_SLOWSTART_COUNT;
     timers.stallTimer = TIMEBASE_STALL_COUNT;
-    timers.dutyTimer = TIMEBASE_DUTY_RAMP;
+    timers.dutyTimer = TIMEBASE_DUTY_COUNT;
     timers.pidTimer = TIMEBASE_PID_COUNT;
     timers.serialWriteTimer = TIMEBASE_SERIAL_COUNT;
     flags.tmrWarmupFlag = 0;
