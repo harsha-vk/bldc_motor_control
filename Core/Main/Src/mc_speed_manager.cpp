@@ -29,7 +29,7 @@ void speedManager()
 		return;
 	}
 
-	if ((sravg > REQUEST_CCW) && (sravg < REQUEST_CW))
+	if (sravg < REQUEST_START)
 	{
 		if (flags.runFlag)
 		{
@@ -48,14 +48,9 @@ void speedManager()
 	switch (mcParams.msg.pid_status)
 	{
 	case McParams_PidStatus_DISABLED:
-		if (sravg <= REQUEST_CCW)
+		if (sravg >= REQUEST_START)
 		{
-			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_PWM_PULSE, MAX_PWM_PULSE);
-			mcData.msg.direction = McData_Rotate_CCW;
-		}
-		if (sravg >= REQUEST_CW)
-		{
-			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_PWM_PULSE, MAX_PWM_PULSE);
+			val = mapToReference(sravg, REQUEST_START, MAX_ADC_COUNT, MIN_PWM_PULSE, MAX_PWM_PULSE);
 			mcData.msg.direction = McData_Rotate_CW;
 		}
 
@@ -69,17 +64,11 @@ void speedManager()
 		}
 		break;
 	case McParams_PidStatus_ENABLED:
-		if (sravg <= REQUEST_CCW)
+		if (sravg >= REQUEST_START)
 		{
-			val = mapToReference(sravg, 0, REQUEST_CCW, MIN_RPM, MAX_RPM);
-			mcData.msg.direction = McData_Rotate_CCW;
-		}
-		if (sravg >= REQUEST_CW)
-		{
-			val = mapToReference(sravg, REQUEST_CW, MAX_ADC_COUNT, MIN_RPM, MAX_RPM);
+			val = mapToReference(sravg, REQUEST_START, MAX_ADC_COUNT, MIN_RPM, MAX_RPM);
 			mcData.msg.direction = McData_Rotate_CW;
 		}
-
 		pidController->setReference(val);
 		break;
 	}

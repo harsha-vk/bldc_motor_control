@@ -102,11 +102,11 @@
 #endif /* USE_HAL_DRIVER */
 
 /**
-  * @brief CMSIS Device version number V2.3.7
+  * @brief CMSIS Device version number V2.3.8
   */
 #define __STM32F3_CMSIS_VERSION_MAIN   (0x02) /*!< [31:24] main version */
 #define __STM32F3_CMSIS_VERSION_SUB1   (0x03) /*!< [23:16] sub1 version */
-#define __STM32F3_CMSIS_VERSION_SUB2   (0x07) /*!< [15:8]  sub2 version */
+#define __STM32F3_CMSIS_VERSION_SUB2   (0x08) /*!< [15:8]  sub2 version */
 #define __STM32F3_CMSIS_VERSION_RC     (0x00) /*!< [7:0]  release candidate */
 #define __STM32F3_CMSIS_VERSION        ((__STM32F3_CMSIS_VERSION_MAIN     << 24)\
                                        |(__STM32F3_CMSIS_VERSION_SUB1 << 16)\
@@ -124,7 +124,7 @@
 #if defined(STM32F301x8)
   #include "stm32f301x8.h"
 #elif defined(STM32F302x8)
-  #include <stm32f302x8.h>
+  #include "stm32f302x8.h"
 #elif defined(STM32F302xC)
   #include "stm32f302xc.h"
 #elif defined(STM32F302xE)
@@ -263,7 +263,7 @@ typedef enum
   */
 
 #if defined (USE_HAL_DRIVER)
- #include <stm32f3xx_hal.h>
+ #include "stm32f3xx_hal.h"
 #endif /* USE_HAL_DRIVER */
 
 #ifdef __cplusplus

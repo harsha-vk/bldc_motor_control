@@ -25,7 +25,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stm32f3xx_hal_def.h>
+#include "stm32f3xx_hal_def.h"
 
 /** @addtogroup STM32F3xx_HAL_Driver
   * @{
@@ -351,7 +351,7 @@ typedef struct __DMA_HandleTypeDef
   */
 
 /* Include DMA HAL Extended module */
-#include <stm32f3xx_hal_dma_ex.h>   
+#include "stm32f3xx_hal_dma_ex.h"   
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup DMA_Exported_Functions

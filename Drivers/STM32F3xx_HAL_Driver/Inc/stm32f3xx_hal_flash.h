@@ -24,7 +24,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stm32f3xx_hal_def.h>
+#include "stm32f3xx_hal_def.h"
    
 /** @addtogroup STM32F3xx_HAL_Driver
   * @{
@@ -299,7 +299,7 @@ typedef struct
   */ 
 
 /* Include FLASH HAL Extended module */
-#include <stm32f3xx_hal_flash_ex.h>  
+#include "stm32f3xx_hal_flash_ex.h"  
 
 /* Exported functions --------------------------------------------------------*/
 /** @addtogroup FLASH_Exported_Functions

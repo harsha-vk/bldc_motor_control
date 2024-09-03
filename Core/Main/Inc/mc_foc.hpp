@@ -8,22 +8,34 @@ namespace MC
     class PIDController
     {
     private:
-        const uint8_t GAIN_DIV = 13;
-        int16_t reference;
-        int16_t kpGain;
-        int16_t kiGain;
-        int16_t kdGain;
-        int16_t lowerLimitOutput;
-        int16_t upperLimitOutput;
-        int32_t integralTermSum;
-        int16_t lastFdbk;
+        float kpGain;
+        float kiGain;
+        float kdGain;
+        float outputLimit;
+        float outputRamp;
+
+        float integralTermSum;
+        float pastError;
+        float pastOutput;
 
     public:
-        PIDController(int16_t kpGain, int16_t kiGain, int16_t kdGain,
-                      int16_t lowerLimitOutput, int16_t upperLimitOutput);
-        void setReference(uint16_t reference);
-        int16_t updateOutput(int16_t fdbk);
+        PIDController(float kpGain, float kiGain, float kdGain, float outputLimit, float outputRamp);
+        void reset();
+        float run(float error);
     };
+
+    class FOC
+    {
+    private:
+        /* data */
+        uint8_t status;
+    public:
+        FOC(/* args */);
+        void init();
+        void innerLoop();
+        void outerLoop();
+    };
+    
 }
 
 #endif // __PID_HPP

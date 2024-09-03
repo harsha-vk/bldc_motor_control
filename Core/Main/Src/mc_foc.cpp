@@ -1,30 +1,30 @@
 #include "mc_foc.hpp"
 
-MC::PIDController::PIDController(int16_t kpGain, int16_t kiGain, int16_t kdGain,
-                                 int16_t lowerLimitOutput, int16_t upperLimitOutput)
+MC::PIDController::PIDController(float kpGain, float kiGain, float kdGain, float outputLimit, float outputRamp)
+    : kpGain(kpGain),
+      kiGain(kiGain),
+      kdGain(kdGain),
+      outputLimit(outputLimit),
+      outputRamp(outputRamp),
+      pastError(0.0f),
+      pastOutput(0.0f),
+      integralTermSum(0.0f)
 {
-    this->reference = 0;
-    this->kpGain = kpGain;
-    this->kiGain = kiGain;
-    this->kdGain = kdGain;
-    this->lowerLimitOutput = lowerLimitOutput;
-    this->upperLimitOutput = upperLimitOutput;
-    this->integralTermSum = 0;
+    ;
 }
 
-void MC::PIDController::setReference(uint16_t reference)
+void MC::PIDController::reset()
 {
-    this->reference = reference;
+    pastError = 0;
+    pastOutput = 0;
+    integralTermSum = 0;
 }
 
-int16_t MC::PIDController::updateOutput(int16_t fdbk)
+float MC::PIDController::run(float error)
 {
-    int32_t wProportionalTerm = 0, wIntegralTerm = 0, wDifferentialTerm = 0, wOutput32 = 0;
-    int32_t error = 0;
+    float proportionalTerm = 0, integralTerm = 0, derivativeTerm = 0, output = 0;
 
-    error = reference - fdbk;
-
-    wProportionalTerm = kpGain * error;
+    proportionalTerm = kpGain * error;
 
     if (0 == kiGain)
     {
@@ -32,32 +32,44 @@ int16_t MC::PIDController::updateOutput(int16_t fdbk)
     }
     else
     {
-        wIntegralTerm = kiGain * error;
-        integralTermSum += wIntegralTerm;
+        integralTerm = kiGain * error;
+        integralTermSum += integralTerm;
     }
 
-    if (integralTermSum > ((int32_t)upperLimitOutput << GAIN_DIV))
+    if (integralTermSum > outputLimit)
     {
-        integralTermSum = (int32_t)upperLimitOutput << GAIN_DIV;
+        integralTermSum = outputLimit;
     }
-    else if (integralTermSum < ((int32_t)lowerLimitOutput << GAIN_DIV))
+    else if (integralTermSum < (-1.0f * outputLimit))
     {
-        integralTermSum = (int32_t)lowerLimitOutput << GAIN_DIV;
+        integralTermSum = (-1.0f * outputLimit);
     }
 
-    wDifferentialTerm = kdGain * (fdbk - lastFdbk);
-    lastFdbk = fdbk;
+    derivativeTerm = kdGain * error;
 
-    wOutput32 = (wProportionalTerm >> GAIN_DIV) + (integralTermSum >> GAIN_DIV) - (wDifferentialTerm >> GAIN_DIV);
+    output = proportionalTerm + integralTerm + derivativeTerm;
 
-    if (wOutput32 > upperLimitOutput)
+    if (output > outputLimit)
     {
-        wOutput32 = upperLimitOutput;
+        output = outputLimit;
     }
-    else if (wOutput32 < lowerLimitOutput)
+    else if (output < outputLimit)
     {
-        wOutput32 = lowerLimitOutput;
+        output = (-1.0f * outputLimit);
     }
 
-    return ((int16_t)(wOutput32));
+    if (outputRamp > 0)
+    {
+        float outputDiff = output - pastOutput;
+        if (outputDiff > outputRamp)
+        {
+            output = pastOutput + outputRamp;
+        }
+        else if (outputDiff < (-1.0f * outputRamp))
+        {
+            output = pastOutput - outputRamp;
+        }
+    }
+
+    return output;
 }

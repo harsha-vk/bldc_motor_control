@@ -83,12 +83,13 @@
 // maximum number that will come from ADC
 #define MAX_ADC_COUNT               4095
 #define HALF_ADC_COUNT              (MAX_ADC_COUNT / 2)
+#define REQUEST_START               (MAX_ADC_COUNT * MIN_DRIVE_PCT / 100)
 #define REQUEST_CCW                 (HALF_ADC_COUNT * (100 - MIN_DRIVE_PCT) / 100)
 #define REQUEST_CW                  (HALF_ADC_COUNT * (100 + MIN_DRIVE_PCT) / 100)
 // ADC averaging factor
 // Number of samples in the ADC average = 2^ADC_AVG_FACTOR
 #define ADC_AVG_FACTOR              2
-#define RAMP_UP_FACTOR              16
+#define RAMP_UP_FACTOR              64
 
 
 #define M1_PWM_A_H                  TIM_CHANNEL_1

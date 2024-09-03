@@ -24,7 +24,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include <stm32f3xx.h>
+#include "stm32f3xx.h"
 
 /** @addtogroup STM32F3xx_LL_Driver
   * @{
