@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-uint32_t mc_adc_reg_buf[MC_ADC_REG_COUNT];
+uint32_t mc_adc_buf[MC_ADC_COUNT];
 
 mc_config_t mc_config;
 
@@ -27,7 +27,7 @@ static void mc_adc_start(void)
         Error_Handler();
     }
 
-    if (HAL_ADC_Start_DMA(&hadc1, mc_adc_reg_buf, MC_ADC_REG_COUNT) != HAL_OK)
+    if (HAL_ADC_Start_DMA(&hadc1, mc_adc_buf, MC_ADC_COUNT) != HAL_OK)
     {
         Error_Handler();
     }
